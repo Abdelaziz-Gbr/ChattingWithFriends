@@ -14,14 +14,18 @@ namespace ChattingWithFriends
 
         public TcpClient socket { get; set; }
 
-        private StreamWriter sw;
-        private StreamReader sr;
+        public UsersManager parentUserManager { get; set; }
 
-        public User(UserDataModel data, TcpClient tcpClient)
+        private StreamWriter sw;
+        private StreamReader reader;
+
+        private bool working = false;
+        public User(UserDataModel data, TcpClient tcpClient, UsersManager userManager)
         {
+            parentUserManager = userManager;
             dataModel = data;
             socket = tcpClient;
-            sr = new StreamReader(socket.GetStream());
+            reader = new StreamReader(socket.GetStream());
             sw = new StreamWriter(socket.GetStream());
             sw.AutoFlush = true;
         }
@@ -31,12 +35,13 @@ namespace ChattingWithFriends
             return dataModel.username;
         }
 
-        internal void SendOkMessage()
+        internal void SendLogInSuccessMessage()
         {
             Task.Run(() => { SendMessageToClient("200"); });
+            AcceptMessages();
         }
 
-        private void SendMessageToClient(string message)
+        public void SendMessageToClient(string message)
         {
             try
             {
@@ -45,6 +50,31 @@ namespace ChattingWithFriends
             catch
             {
                 MessageBox.Show($"{dataModel.username} got a prblem");
+            }
+        }
+
+        internal void SendPasswordIncorrectMessage()
+        {
+            Task.Run(() => { SendMessageToClient("Password Incorrect"); });
+        }
+
+        public void AcceptMessages()
+        {
+            working = true;
+            while (working)
+            {
+                string tempReq = reader.ReadLine();
+
+                var userReq =  UserRequest.ParseFromString(tempReq);
+
+                switch (userReq.reqType)
+                {
+                    case 1:
+                        {
+                            Task.Run(() => { SendMessageToClient(parentUserManager.GetAllUsersAsString()); });
+                            break;
+                        }
+                }
             }
         }
     }

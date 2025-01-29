@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using ClientDataModels;
 using ClientDataBase;
-
 namespace ChattingWithFriends_Client
 {
     internal class Connection
@@ -29,7 +28,7 @@ namespace ChattingWithFriends_Client
 
         public void LogIn(string username, string password)
         {
-            SendPacketToServer($"{username},{password}");
+            SendPacketToServer(ServerCommunicationTemplate.GetLogInTemplate(username, password).ToString());
             string? serverResponse = ReadServerPacket();
             if (serverResponse != null)
                 if (serverResponse.Equals("200"))
@@ -39,15 +38,15 @@ namespace ChattingWithFriends_Client
                     OnLoggedIn?.Invoke();
                 }
                 else
-                    MessageBox.Show("Wrong username or password", "Try Again");
+                    MessageBox.Show($"{serverResponse}", "Try Again");
             else
                 MessageBox.Show("Failed To send credentials to the server", "Server Error");
         }
 
         private void getClientsListFromServer()
         {
-            SendPacketToServer("get_users");
-            string incommning = ReadServerPacket();
+            SendPacketToServer(ServerCommunicationTemplate.GetAllClientsRequestTemplate().ToString());
+            string? incommning = ReadServerPacket();
             if (incommning != null) 
             {
                 string[] friends = incommning.Split('$');
@@ -62,6 +61,8 @@ namespace ChattingWithFriends_Client
 
                 }
             }
+            else
+                MessageBox.Show("Failed To reach the server", "Server Error");
         }
 
 

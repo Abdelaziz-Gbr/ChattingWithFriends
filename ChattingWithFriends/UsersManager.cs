@@ -21,20 +21,20 @@ namespace ChattingWithFriends
             allUsers = db.GetUsers();
         }
 
-        public bool AddUserOrCheckIfCredsCorrect(UserDataModel user, TcpClient tcpClient)
+      /*  public bool AddUserOrCheckIfCredsCorrect(UserDataModel user, TcpClient tcpClient)
         {
             var checkedUser = db.GetUesrByUserName(user.username);
             if (checkedUser != null)
             {
                 
-                //is not null then username exists -> check for password
+                //is not null then _username exists -> check for _password
                 if (checkedUser.password.Equals(user.password))
                 {
-                    //password correct check if blocked
+                    //_password correct check if blocked
                     if (!checkedUser.blocked)
                     {
                         //all good let the user know he his credentials are ok and keep its connection open.
-                        //for security and performance reasons remove the password field 
+                        //for security and performance reasons remove the _password field 
                         AddOnlineUser(tcpClient, checkedUser);
                         //no need to add it to the Allusers list as it should be there already.
                        // MessageBox.Show("1", "got here");
@@ -50,8 +50,8 @@ namespace ChattingWithFriends
                 }
                 else
                 {
-                    //password is incorrect
-                    //imp func to tell the user the password is incorrect.
+                    //_password is incorrect
+                    //imp func to tell the user the _password is incorrect.
                     //MessageBox.Show("3", "got here");
                     return false;
                 }
@@ -75,7 +75,7 @@ namespace ChattingWithFriends
                 }
                 else
                 {
-                    //username dublicated
+                    //_username dublicated
                     //send message to the user to let'em know
                     //MessageBox.Show("4", "got here");
                     return false;
@@ -93,10 +93,10 @@ namespace ChattingWithFriends
                 id = checkedUser.id,
             };
             User newConnection = new(OnlineUser, tcpClient);
-            newConnection.SendOkMessage();
+            newConnection.SendLogInSuccessMessage();
             connectedUsers.Add(newConnection);
         }
-
+*/
         public string[] GetUsernames() 
         {
             string[] usernames = new string[connectedUsers.Count];
@@ -106,5 +106,74 @@ namespace ChattingWithFriends
             }
             return usernames;
         }
+
+        public void AttemptLogin(string reqBody, TcpClient tcpClient)
+        {
+            string[] body = reqBody.Split("$");
+            string _username = body[0];
+            string _password = body[1];
+            var userData = db.GetUesrByUserName(_username);
+            var newUser = new User(userData, tcpClient, this);
+            if (userData != null)
+            {
+                //user exists
+                //check for _password
+                if (userData.password == _password) 
+                {
+                    //_password correct -> log the user in
+                    connectedUsers.Add(newUser);
+                    newUser.SendLogInSuccessMessage();
+                }
+                else
+                {
+                    //_password incorrect
+                    newUser.SendPasswordIncorrectMessage();
+                }
+            }
+            else
+            {
+                //user doesn't exist
+                //add user
+                var userDataModel = new UserDataModel { username = _username, password = _password };
+                int user_id = db.AddUsesr(userDataModel);
+                userDataModel.id = user_id;
+                allUsers.Add(userDataModel);
+                newUser.dataModel = userDataModel;
+                connectedUsers.Add(newUser);
+                newUser.SendLogInSuccessMessage();
+            }
+        }
+
+    /*    public void SendClientsList(string reqBody)
+        {
+            string _username = reqBody;
+            var user = GetUserByUserName(_username);
+            user?.SendMessageToClient(AllUsers());
+            
+        }
+*/
+        private User? GetUserByUserName(string username)
+        {
+            foreach (var user in connectedUsers) 
+            {
+                if(user.GetUsername() == username)
+                    return user;
+            }
+            return null;
+        }
+
+        public string GetAllUsersAsString()
+        {
+            string allUsersString = "";
+            for(int i =0;i<allUsers.Count;i++)
+            {
+                if(i == allUsers.Count-1)
+                    allUsersString += allUsers[i].ToString();
+                else
+                    allUsersString += allUsers[i].ToString() + "$";
+            }
+            return allUsersString;
+        }
+
     }
 }

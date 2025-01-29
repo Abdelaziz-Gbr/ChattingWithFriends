@@ -10,8 +10,8 @@ namespace ChattingWithFriends_Client
 
         private void btn_signIn_Click(object sender, EventArgs e)
         {
-            string username = txtBox_username.Text;
-            string password = txtBox_password.Text;
+            string username = "Abdelaziz";// txtBox_username.Text;
+            string password = "123";// txtBox_password.Text;
 
             serverConneection = Program.GetConnection();
             serverConneection.OnLoggedIn += SignedIn;

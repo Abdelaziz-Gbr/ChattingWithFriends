@@ -32,7 +32,7 @@ namespace ChattingWithFriends
         {
 
             servicing = true;
-            serviceJob = new Task(AcceptIncomming);
+            serviceJob = new Task(AcceptClientRequests);
             serviceJob.Start();
         }
 
@@ -42,7 +42,7 @@ namespace ChattingWithFriends
             serviceJob?.Dispose();
         }
 
-        private void AcceptIncomming()
+       /* private void AcceptIncomming()
         {
             listener.Start();
             while(servicing)
@@ -53,13 +53,13 @@ namespace ChattingWithFriends
                 {
                     bool userCorrect = usersManager.AddUserOrCheckIfCredsCorrect(user, tcpClient);
                     //maybe show the user is now online.
-                    /*if (userCorrect)
+                    *//*if (userCorrect)
                         OnConnectedUsersListUpdated?.Invoke();
                     else
-                        throw new Exception("to do");*/
+                        throw new Exception("to do");*//*
                 }
             }
-        }
+        }*/
 
         private UserDataModel? GetUserCreditentials(TcpClient tcpClient)
         {
@@ -85,6 +85,55 @@ namespace ChattingWithFriends
         private void UsersListUpdated()
         {
             OnAllUsersListUpdated();
+        }
+
+        private void AcceptClientRequests()
+        {
+            listener.Start();
+            while (servicing)
+            {
+                TcpClient tcpClient = listener.AcceptTcpClient();
+                var userReq = GetUserRequest(tcpClient);
+                switch(userReq.reqType)
+                {
+                    case 0:
+                        {
+                            //log
+                            usersManager.AttemptLogin(userReq.reqBody, tcpClient);
+                            break;
+                        }
+                    default:
+                        {
+
+                            BadRequest(tcpClient);
+                            break;
+                        }
+                }
+            }
+        }
+
+        private UserRequest GetUserRequest(TcpClient tcpClient)
+        {
+            int req = -1;
+            StreamReader reader = new StreamReader(tcpClient.GetStream());
+            string tempReq = reader.ReadLine();
+            
+            return UserRequest.ParseFromString(tempReq);
+        }
+
+        private void BadRequest(TcpClient tcpClient)
+        {
+            try
+            {
+                StreamWriter tempWriter = new StreamWriter(tcpClient.GetStream());
+                tempWriter.WriteLine("Bad Request");
+                tempWriter.Flush();
+                tempWriter.Close();
+            }
+            catch
+            {
+                //donothing
+            }
         }
     }
 }

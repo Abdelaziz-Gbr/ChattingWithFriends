@@ -16,7 +16,7 @@ namespace ClientDataBase
             if (GetFriend(friend.id) != null)
                 return;
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Friend (id, username) VALUES (@id, @username)", sqlConnection);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Friend (id, username) VALUES (@id, @username)", sqlConnection);
             cmd.Parameters.AddWithValue("id", friend.id);
             cmd.Parameters.AddWithValue("username", friend.username);
             int rows = cmd.ExecuteNonQuery();
@@ -26,7 +26,7 @@ namespace ClientDataBase
         public static Friend? GetFriend(int fId)
         {
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("SELECT username FROM TABLE Friend WHERE id = @id", sqlConnection);
+            SqlCommand cmd = new SqlCommand("SELECT username FROM Friend WHERE id = @id", sqlConnection);
             cmd.Parameters.AddWithValue("id", fId);
             object result = cmd.ExecuteScalar();
 
@@ -49,7 +49,7 @@ namespace ClientDataBase
         public static void SaveMessage(Message message)
         {
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Messages (senderName, recieverName, body) VALUES (@senderName, @recieverName, @body)", sqlConnection);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Messages (senderName, recieverName, body) VALUES (@senderName, @recieverName, @body)", sqlConnection);
             cmd.Parameters.AddWithValue("senderName", message.senderName);
             cmd.Parameters.AddWithValue("recieverName", null);
             cmd.Parameters.AddWithValue("body", message.text);
