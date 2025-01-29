@@ -12,7 +12,7 @@ namespace DataBase
             sqlConnection = new SqlConnection("Data Source=s3dy;Initial Catalog=ChatApplication;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
 
-        public int UserExists(UserDataModel model)
+        public int GetUserIDIfExists(UserDataModel model)
         {
             string selectQuery = $"SELECT id FROM Users WHERE username=@username AND password=@password";
             sqlConnection.Open();
@@ -40,57 +40,32 @@ namespace DataBase
 
         public int CheckUserCredsOrAddIfNotFound(UserDataModel userData)
         {
-            int userid = UserExists(userData);
+            int userid = GetUserIDIfExists(userData);
             if (userid == -1)
                 userid =  AddUsesr(userData);
             return userid;
-/*
-            try
+
+        }
+
+        public List<UserDataModel> GetUsers() 
+        {
+            var users = new List<UserDataModel>();
+            sqlConnection.Open();
+            SqlCommand cmd = new SqlCommand("SELECT id, username, blocked FROM Users", sqlConnection);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                string selectQuery = "SELECT id FROM Users WHERE username = @username AND password = @password";
-                string insertQuery = "INSERT INTO Users (username, password) OUTPUT INSERTED.id VALUES (@username, @password)";
-
-                sqlConnection.Open();
-
-                    // Check if user exists
-                    using (SqlCommand selectCommand = new SqlCommand(selectQuery, sqlConnection))
-                    {
-                        selectCommand.Parameters.AddWithValue("@username", userData.username);
-                        selectCommand.Parameters.AddWithValue("@password", userData.password);
-
-                        object result = selectCommand.ExecuteScalar();
-
-                        if (result != null) // User exists
-                        {
-                            sqlConnection.Close();
-                            return Convert.ToInt32(result);
-                        }
-                    }
-
-                    // Add user if not found
-                    using (SqlCommand insertCommand = new SqlCommand(insertQuery, sqlConnection))
-                    {
-                        insertCommand.Parameters.AddWithValue("@username", userData.username);
-                        insertCommand.Parameters.AddWithValue("@password", userData.password);
-
-                        sqlConnection.Close();
-                        return (int)insertCommand.ExecuteScalar();
-                    }
+                var usesr = new UserDataModel 
+                {
+                    id = (int)reader["id"],
+                    username = (string)reader["username"],
+                    blocked = (bool)reader["BLOCKED"] 
+                };
+                users.Add(usesr);
             }
-            catch (SqlException ex)
-            {
-                // Log or handle the exception
-                Console.WriteLine($"SQL Error: {ex.Message}");
-                sqlConnection.Close();
-                return -1; // Return an error code
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception
-                Console.WriteLine($"Unexpected Error: {ex.Message}");
-                sqlConnection.Close();
-                return -1;
-            }*/
+
+
+            return users;
         }
 
 

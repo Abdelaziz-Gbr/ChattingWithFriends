@@ -147,6 +147,7 @@
             Controls.Add(btn_start);
             Name = "Form1";
             Text = "ChatWithFriends_Admin";
+            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
         }
