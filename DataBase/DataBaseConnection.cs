@@ -12,7 +12,7 @@ namespace DataBase
             sqlConnection = new SqlConnection("Data Source=s3dy;Initial Catalog=ChatApplication;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
 
-        public int GetUserIDIfExists(UserDataModel model)
+       /* public int GetUserIDIfExists(UserDataModel model)
         {
             string selectQuery = $"SELECT id FROM Users WHERE username=@username AND password=@password";
             sqlConnection.Open();
@@ -24,7 +24,7 @@ namespace DataBase
             if(result == null)
                 return -1;
             return (int)result;
-        }
+        }*/
 
         public int AddUsesr(UserDataModel userDataModel)
         {
@@ -38,22 +38,41 @@ namespace DataBase
             if(result == null) return -1; return (int)result;
         }
 
+        public bool IsUserBlocked(UserDataModel user)
+        {
+            sqlConnection.Open();
+            SqlCommand sqlCommand = new SqlCommand("SELECT BLOCKED FROM Users WHERE username = @username", sqlConnection);
+            sqlCommand.Parameters.AddWithValue("username", user.username);
+            using (SqlDataReader reader = sqlCommand.ExecuteReader())
+            {
+                sqlConnection.Close();
+                if (reader.Read())
+                    return (bool)reader[0];
+                return false;
+            }
+        }
         public UserDataModel? GetUesrByUserName(string username)
         {
             UserDataModel user = null;
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("SELECT id, BLOCKED FROM Users WHERE username = @username", sqlConnection);
+            SqlCommand cmd = new SqlCommand("SELECT id, BLOCKED, password FROM Users WHERE username = @username", sqlConnection);
             cmd.Parameters.AddWithValue("username", username);
             SqlDataReader sqlDataReader = cmd.ExecuteReader();
             if(sqlDataReader.Read())
             {
-                user = new UserDataModel { blocked = (bool)sqlDataReader["BLOCKED"], id = (int)sqlDataReader["id"], username = username };
+                user = new UserDataModel 
+                { 
+                    blocked = (bool)sqlDataReader["BLOCKED"],
+                    id = (int)sqlDataReader["id"],
+                    username = username ,
+                    password = (string)sqlDataReader["password"]
+                };
             }
             sqlConnection.Close();
             return user;
         }
 
-        public UserDataModel? CheckUserCredsOrAddIfNotFound(UserDataModel userData)
+       /* public UserDataModel? CheckUserCredsOrAddIfNotFound(UserDataModel userData)
         {
             var user = GetUesrByUserName(userData.username);
             if (user != null)//user found            {
@@ -64,7 +83,7 @@ namespace DataBase
             //if reached then this user is either dublicated, wrong password Or Blocked.
             return null;
 
-        }
+        }*/
 
         public List<UserDataModel> GetUsers() 
         {
@@ -83,7 +102,7 @@ namespace DataBase
                 users.Add(usesr);
             }
 
-
+            sqlConnection.Close();
             return users;
         }
 

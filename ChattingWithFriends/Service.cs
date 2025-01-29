@@ -15,7 +15,8 @@ namespace ChattingWithFriends
         private TcpListener listener;
         private bool servicing = false;
         private Task? serviceJob;
-        private UsersManager usersManager;
+        public UsersManager usersManager;
+        public event Action OnAllUsersListUpdated;
 
         public event Action OnConnectedUsersListUpdated;
         public Service()
@@ -23,6 +24,8 @@ namespace ChattingWithFriends
             ip = IPAddress.Loopback;
             listener = new TcpListener(ip, port);
             usersManager = new UsersManager();
+            usersManager.OnAllUsersListUpdated += UsersListUpdated;
+
         }
 
         public void StartService()
@@ -49,10 +52,11 @@ namespace ChattingWithFriends
                 if(user != null) 
                 {
                     bool userCorrect = usersManager.AddUserOrCheckIfCredsCorrect(user, tcpClient);
-                    if (userCorrect)
+                    //maybe show the user is now online.
+                    /*if (userCorrect)
                         OnConnectedUsersListUpdated?.Invoke();
                     else
-                        throw new Exception("to do");
+                        throw new Exception("to do");*/
                 }
             }
         }
@@ -76,6 +80,11 @@ namespace ChattingWithFriends
         public List<UserDataModel> GetAllUsers()
         {
             return usersManager.allUsers;
+        }
+
+        private void UsersListUpdated()
+        {
+            OnAllUsersListUpdated();
         }
     }
 }

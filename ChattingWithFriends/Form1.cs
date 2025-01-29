@@ -27,14 +27,21 @@ namespace ChattingWithFriends
         {
             myService = Program.GetService();
             myService.StartService();
-            myService.OnConnectedUsersListUpdated += UpdatedUsersList;
+            myService.OnAllUsersListUpdated += UpdatedUsersList;
             UpdatedUsersList();
 
         }
 
         private void UpdatedUsersList()
         {
+            if(InvokeRequired)
+            {
+                Invoke(new Action(UpdatedUsersList));
+                return;
+            }
             var users = myService.GetAllUsers();
+            checkedList_UnblockedClients.Items.Clear();
+            checkedList_BlockedClients.Items.Clear();
             foreach (var user in users)
             {
                 if(!user.blocked)
