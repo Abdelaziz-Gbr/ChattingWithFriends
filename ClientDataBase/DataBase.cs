@@ -49,8 +49,9 @@ namespace ClientDataBase
         public static void SaveMessage(Message message)
         {
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Messages (sender_id, body) VALUES (@sender_id, @body)", sqlConnection);
-            cmd.Parameters.AddWithValue("sender_id", message.senderId);
+            SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Messages (senderName, recieverName, body) VALUES (@senderName, @recieverName, @body)", sqlConnection);
+            cmd.Parameters.AddWithValue("senderName", message.senderName);
+            cmd.Parameters.AddWithValue("recieverName", null);
             cmd.Parameters.AddWithValue("body", message.text);
             int rows = cmd.ExecuteNonQuery();
             sqlConnection.Close();

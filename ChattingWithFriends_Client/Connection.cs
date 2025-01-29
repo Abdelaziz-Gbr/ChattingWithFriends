@@ -149,7 +149,7 @@ namespace ChattingWithFriends_Client
 
         private void OnMessageRecieved(int sender_id, string sender_username, string message)
         {
-            DataBase.SaveMessage(new ClientDataModels.Message {senderId = sender_id, senderName = sender_username, text = message });
+            DataBase.SaveMessage(new ClientDataModels.Message {recieverName = username, senderName = sender_username, text = message });
             //let the user know they recieved a new message.
             //todo
         }
