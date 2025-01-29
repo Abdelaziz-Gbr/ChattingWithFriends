@@ -8,4 +8,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ClientDataBase\ClientDataBase.csproj" />
+    <ProjectReference Include="..\ClientDataModels\ClientDataModels.csproj" />
+  </ItemGroup>
+
 </Project>

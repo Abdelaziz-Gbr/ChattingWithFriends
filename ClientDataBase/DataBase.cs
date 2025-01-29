@@ -4,14 +4,14 @@ namespace ClientDataBase
 {
     public class DataBase
     {
-        SqlConnection sqlConnection;
+        private static SqlConnection sqlConnection = new SqlConnection(@"Data Source=s3dy;Initial Catalog=ChatWithFriendClientDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=FalseData Source=s3dy;Initial Catalog=ChatWithFriendClientDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
 
-        public DataBase()
+        private DataBase()
         {
-            sqlConnection = new SqlConnection(@"Data Source=s3dy;Initial Catalog=ChatWithFriendClientDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=FalseData Source=s3dy;Initial Catalog=ChatWithFriendClientDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+            
         }
 
-        public void SaveFriend(Friend friend)
+        public static void SaveFriend(Friend friend)
         {
             if (GetFriend(friend.id) != null)
                 return;
@@ -23,7 +23,7 @@ namespace ClientDataBase
             sqlConnection.Close();
         }
 
-        public Friend? GetFriend(int fId)
+        public static Friend? GetFriend(int fId)
         {
             sqlConnection.Open();
             SqlCommand cmd = new SqlCommand("SELECT username FROM TABLE Friend WHERE id = @id", sqlConnection);
@@ -38,7 +38,7 @@ namespace ClientDataBase
                 return null;
         }
 
-        public void SaveMessage(Message message)
+        public static void SaveMessage(Message message)
         {
             sqlConnection.Open();
             SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Messages (id, sender_id, body) VALUES (@message_id, @sender_id, @body)", sqlConnection);
@@ -50,7 +50,7 @@ namespace ClientDataBase
 
         }
 
-        public List<Friend> GetFriends() 
+        public static List<Friend> GetFriends() 
         {
             var friends = new List<Friend>();
             sqlConnection.Open();

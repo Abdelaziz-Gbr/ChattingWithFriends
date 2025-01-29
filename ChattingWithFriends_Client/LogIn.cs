@@ -20,8 +20,9 @@ namespace ChattingWithFriends_Client
 
         private void SignedIn() 
         {
-            MessageBox.Show("congratulations now you have to make sure you save that username and use it to send upcomming messages", "Log in success");
-
+            HomeScreen homeScreen = new HomeScreen();
+            homeScreen.Show();
+            this.Hide();
         }
     }
 }

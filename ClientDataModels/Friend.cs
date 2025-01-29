@@ -10,5 +10,10 @@ namespace ClientDataModels
     {
         public int id {  get; set; }
         public string username {  get; set; }
+
+        public override string ToString()
+        {
+            return username;
+        }
     }
 }
