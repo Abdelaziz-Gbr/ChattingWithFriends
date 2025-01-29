@@ -35,6 +35,7 @@
             checkedList_BlockedClients = new CheckedListBox();
             label1 = new Label();
             label2 = new Label();
+            btn_StopService = new Button();
             SuspendLayout();
             // 
             // btn_start
@@ -42,6 +43,7 @@
             btn_start.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btn_start.AutoSize = true;
             btn_start.Font = new Font("Segoe UI", 12F);
+            btn_start.ForeColor = Color.Green;
             btn_start.Location = new Point(-1, 2);
             btn_start.Name = "btn_start";
             btn_start.Size = new Size(800, 31);
@@ -116,11 +118,26 @@
             label2.TabIndex = 6;
             label2.Text = "Blocked Users";
             // 
+            // btn_StopService
+            // 
+            btn_StopService.AutoSize = true;
+            btn_StopService.Dock = DockStyle.Top;
+            btn_StopService.Font = new Font("Segoe UI", 12F);
+            btn_StopService.ForeColor = Color.Red;
+            btn_StopService.Location = new Point(0, 0);
+            btn_StopService.Name = "btn_StopService";
+            btn_StopService.Size = new Size(800, 31);
+            btn_StopService.TabIndex = 7;
+            btn_StopService.Text = "Stop Service";
+            btn_StopService.UseVisualStyleBackColor = true;
+            btn_StopService.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btn_StopService);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(checkedList_BlockedClients);
@@ -143,5 +160,6 @@
         private CheckedListBox checkedList_BlockedClients;
         private Label label1;
         private Label label2;
+        private Button btn_StopService;
     }
 }
