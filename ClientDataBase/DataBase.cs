@@ -38,11 +38,18 @@ namespace ClientDataBase
                 return null;
         }
 
+        public static void AddIfNotExists(Friend friend)
+        {
+            //friend already exists
+            if(GetFriend(friend.id) != null) return;
+            //frind does not exist -> save
+            SaveFriend(friend);
+        }
+
         public static void SaveMessage(Message message)
         {
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Messages (id, sender_id, body) VALUES (@message_id, @sender_id, @body)", sqlConnection);
-            cmd.Parameters.AddWithValue("message_id", message.id);
+            SqlCommand cmd = new SqlCommand("INSERT INTO TABLE Messages (sender_id, body) VALUES (@sender_id, @body)", sqlConnection);
             cmd.Parameters.AddWithValue("sender_id", message.senderId);
             cmd.Parameters.AddWithValue("body", message.text);
             int rows = cmd.ExecuteNonQuery();

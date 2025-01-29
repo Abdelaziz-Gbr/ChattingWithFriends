@@ -30,11 +30,9 @@
         {
             lbl_username = new Label();
             btn_signOut = new Button();
-            checkedList_pastChats = new CheckedListBox();
             btn_OpenSelectedChat = new Button();
-            label2 = new Label();
             label1 = new Label();
-            checkedList_onlineFriends = new CheckedListBox();
+            checkedList_chats = new CheckedListBox();
             SuspendLayout();
             // 
             // lbl_username
@@ -60,14 +58,6 @@
             btn_signOut.Text = "Sign out";
             btn_signOut.UseVisualStyleBackColor = true;
             // 
-            // checkedList_pastChats
-            // 
-            checkedList_pastChats.FormattingEnabled = true;
-            checkedList_pastChats.Location = new Point(12, 87);
-            checkedList_pastChats.Name = "checkedList_pastChats";
-            checkedList_pastChats.Size = new Size(184, 328);
-            checkedList_pastChats.TabIndex = 2;
-            // 
             // btn_OpenSelectedChat
             // 
             btn_OpenSelectedChat.AutoSize = true;
@@ -81,33 +71,23 @@
             btn_OpenSelectedChat.UseVisualStyleBackColor = true;
             btn_OpenSelectedChat.Click += button2_Click;
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(12, 63);
-            label2.Name = "label2";
-            label2.Size = new Size(81, 21);
-            label2.TabIndex = 4;
-            label2.Text = "Past Chats";
-            // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(262, 63);
+            label1.Location = new Point(12, 63);
             label1.Name = "label1";
-            label1.Size = new Size(111, 21);
+            label1.Size = new Size(108, 21);
             label1.TabIndex = 6;
-            label1.Text = "Online Friends";
+            label1.Text = "Avilable Chats";
             // 
-            // checkedList_onlineFriends
+            // checkedList_chats
             // 
-            checkedList_onlineFriends.FormattingEnabled = true;
-            checkedList_onlineFriends.Location = new Point(262, 87);
-            checkedList_onlineFriends.Name = "checkedList_onlineFriends";
-            checkedList_onlineFriends.Size = new Size(184, 328);
-            checkedList_onlineFriends.TabIndex = 5;
+            checkedList_chats.FormattingEnabled = true;
+            checkedList_chats.Location = new Point(12, 87);
+            checkedList_chats.Name = "checkedList_chats";
+            checkedList_chats.Size = new Size(434, 328);
+            checkedList_chats.TabIndex = 5;
             // 
             // HomeScreen
             // 
@@ -115,10 +95,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(458, 456);
             Controls.Add(label1);
-            Controls.Add(checkedList_onlineFriends);
-            Controls.Add(label2);
+            Controls.Add(checkedList_chats);
             Controls.Add(btn_OpenSelectedChat);
-            Controls.Add(checkedList_pastChats);
             Controls.Add(btn_signOut);
             Controls.Add(lbl_username);
             Name = "HomeScreen";
@@ -132,10 +110,8 @@
 
         private Label lbl_username;
         private Button btn_signOut;
-        private CheckedListBox checkedList_pastChats;
         private Button btn_OpenSelectedChat;
-        private Label label2;
         private Label label1;
-        private CheckedListBox checkedList_onlineFriends;
+        private CheckedListBox checkedList_chats;
     }
 }

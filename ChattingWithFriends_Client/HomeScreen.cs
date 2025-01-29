@@ -27,11 +27,12 @@ namespace ChattingWithFriends_Client
         private void HomeScreen_Load(object sender, EventArgs e)
         {
             lbl_username.Text += connection.username;
-            LoadPastChats();
+            connection.AcceptIncommingMessages();
+            LoadChats();
         }
-        private void LoadPastChats()
+        private void LoadChats()
         {
-            connection.GetAllFriends().ForEach(friend => {checkedList_pastChats.Items.Add(friend);});
+            connection.GetAllFriends().ForEach(friend => {checkedList_chats.Items.Add(friend);});
         }
     }
 }
