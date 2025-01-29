@@ -38,12 +38,31 @@ namespace DataBase
             if(result == null) return -1; return (int)result;
         }
 
-        public int CheckUserCredsOrAddIfNotFound(UserDataModel userData)
+        public UserDataModel? GetUesrByUserName(string username)
         {
-            int userid = GetUserIDIfExists(userData);
-            if (userid == -1)
-                userid =  AddUsesr(userData);
-            return userid;
+            UserDataModel user = null;
+            sqlConnection.Open();
+            SqlCommand cmd = new SqlCommand("SELECT id, BLOCKED FROM Users WHERE username = @username", sqlConnection);
+            cmd.Parameters.AddWithValue("username", username);
+            SqlDataReader sqlDataReader = cmd.ExecuteReader();
+            if(sqlDataReader.Read())
+            {
+                user = new UserDataModel { blocked = (bool)sqlDataReader["BLOCKED"], id = (int)sqlDataReader["id"], username = username };
+            }
+            sqlConnection.Close();
+            return user;
+        }
+
+        public UserDataModel? CheckUserCredsOrAddIfNotFound(UserDataModel userData)
+        {
+            var user = GetUesrByUserName(userData.username);
+            if (user != null)//user found            {
+                return user;
+            int userid = AddUsesr(userData);
+            if(userid != -1)//user added successfully
+                return new UserDataModel { id = userid, username = userData.username};
+            //if reached then this user is either dublicated, wrong password Or Blocked.
+            return null;
 
         }
 

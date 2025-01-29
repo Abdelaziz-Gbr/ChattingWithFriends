@@ -10,24 +10,26 @@ namespace ChattingWithFriends
 {
     internal class UsersManager
     {
-        private List<User> users;
-        private DataBaseConnection db;
+        private readonly List<User> connectedUsers;
+        private readonly DataBaseConnection db;
+        public List<UserDataModel> allUsers { get; }
         public UsersManager() 
         {
-            users = new List<User>();
+            connectedUsers = new List<User>();
             db= new DataBaseConnection();
+            allUsers = db.GetUsers();
         }
 
         public bool AddUserOrCheckIfCredsCorrect(UserDataModel user, TcpClient tcpClient)
         {
             //now contact DB to Add user or get its ID
-            int id = db.CheckUserCredsOrAddIfNotFound(user);
-            if(id != -1)
+            UserDataModel? SignInUser = db.CheckUserCredsOrAddIfNotFound(user);
+            if (SignInUser != null && !SignInUser.blocked)
             {
-                user.id = id;
-                User newConnection = new User(user,tcpClient);
+                User newConnection = new User(SignInUser, tcpClient);
                 newConnection.SendOkMessage();
-                users.Add(newConnection);
+                connectedUsers.Add(newConnection);
+                allUsers.Add(user);
                 return true;
             }
             return false;
@@ -35,10 +37,10 @@ namespace ChattingWithFriends
 
         public string[] GetUsernames() 
         {
-            string[] usernames = new string[users.Count];
-            for(int i =0; i < users.Count; i++)
+            string[] usernames = new string[connectedUsers.Count];
+            for(int i =0; i < connectedUsers.Count; i++)
             {
-                usernames[i] = users[i].GetUsername();
+                usernames[i] = connectedUsers[i].GetUsername();
             }
             return usernames;
         }

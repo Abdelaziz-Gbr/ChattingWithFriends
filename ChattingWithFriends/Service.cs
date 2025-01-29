@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 using DataModels;
 namespace ChattingWithFriends
 {
-    internal delegate void ConnectedUsersListUpdated(string[] usernames);
+    //internal delegate void ConnectedUsersListUpdated(List<UserDataModel> users);
     internal class Service
     {
         private IPAddress ip;
@@ -18,7 +17,7 @@ namespace ChattingWithFriends
         private Task? serviceJob;
         private UsersManager usersManager;
 
-        public event ConnectedUsersListUpdated OnConnectedUsersListUpdated;
+        public event Action OnConnectedUsersListUpdated;
         public Service()
         {
             ip = IPAddress.Loopback;
@@ -51,7 +50,7 @@ namespace ChattingWithFriends
                 {
                     bool userCorrect = usersManager.AddUserOrCheckIfCredsCorrect(user, tcpClient);
                     if (userCorrect)
-                        OnConnectedUsersListUpdated?.Invoke(usersManager.GetUsernames());
+                        OnConnectedUsersListUpdated?.Invoke();
                     else
                         throw new Exception("to do");
                 }
@@ -72,6 +71,11 @@ namespace ChattingWithFriends
                 MessageBox.Show(e.Message, "error getting user creds");
                 return null;
             }
+        }
+
+        public List<UserDataModel> GetAllUsers()
+        {
+            return usersManager.allUsers;
         }
     }
 }

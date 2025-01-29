@@ -7,5 +7,10 @@
         public string password{ get; set; }
 
         public bool blocked = false;
+
+        public override string ToString()
+        {
+            return $"{username}";
+        }
     }
 }
