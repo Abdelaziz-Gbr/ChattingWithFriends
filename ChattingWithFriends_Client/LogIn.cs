@@ -1,9 +1,9 @@
 namespace ChattingWithFriends_Client
 {
-    public partial class Form1 : Form
+    public partial class LogIn : Form
     {
         private Connection serverConneection;
-        public Form1()
+        public LogIn()
         {
             InitializeComponent();
         }

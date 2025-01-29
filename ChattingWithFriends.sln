@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChattingWithFriends_Client", "ChattingWithFriends_Client\ChattingWithFriends_Client.csproj", "{471ABF39-3EC5-4408-B65D-5E2C2CCE9BAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDataModels", "ClientDataModels\ClientDataModels.csproj", "{B1C52EEA-0AF1-42F6-A1D5-D3112E24F859}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDataBase", "ClientDataBase\ClientDataBase.csproj", "{9552C5B9-4A8B-4E1D-B39E-967696E175BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{471ABF39-3EC5-4408-B65D-5E2C2CCE9BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{471ABF39-3EC5-4408-B65D-5E2C2CCE9BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{471ABF39-3EC5-4408-B65D-5E2C2CCE9BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1C52EEA-0AF1-42F6-A1D5-D3112E24F859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1C52EEA-0AF1-42F6-A1D5-D3112E24F859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1C52EEA-0AF1-42F6-A1D5-D3112E24F859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1C52EEA-0AF1-42F6-A1D5-D3112E24F859}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9552C5B9-4A8B-4E1D-B39E-967696E175BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9552C5B9-4A8B-4E1D-B39E-967696E175BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9552C5B9-4A8B-4E1D-B39E-967696E175BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9552C5B9-4A8B-4E1D-B39E-967696E175BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
