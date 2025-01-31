@@ -32,7 +32,17 @@ namespace ChattingWithFriends_Client
         }
         private void LoadChats()
         {
-            connection.GetAllFriends().ForEach(friend => {checkedList_chats.Items.Add(friend);});
+            connection.GetAllFriends().ForEach(friend => { checkedList_chats.Items.Add(friend); });
+        }
+
+        private void btn_refresh_Click(object sender, EventArgs e)
+        {
+            checkedList_chats.Items.Clear();
+            connection.RefreshClientsList().ForEach(
+                friend =>
+                {
+                    checkedList_chats.Items.Add(friend);
+                });
         }
     }
 }

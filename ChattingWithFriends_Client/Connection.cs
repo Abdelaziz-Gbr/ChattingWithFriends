@@ -156,6 +156,11 @@ namespace ChattingWithFriends_Client
             //todo
         }
 
+        public List<Friend> RefreshClientsList()
+        {
+            getClientsListFromServer();
+            return GetAllFriends();
+        }
         public void SendMessage()
         {
             //todo

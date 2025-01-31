@@ -33,6 +33,7 @@
             btn_OpenSelectedChat = new Button();
             label1 = new Label();
             checkedList_chats = new CheckedListBox();
+            btn_refresh = new Button();
             SuspendLayout();
             // 
             // lbl_username
@@ -63,7 +64,7 @@
             btn_OpenSelectedChat.AutoSize = true;
             btn_OpenSelectedChat.Dock = DockStyle.Bottom;
             btn_OpenSelectedChat.Font = new Font("Segoe UI", 12F);
-            btn_OpenSelectedChat.Location = new Point(0, 425);
+            btn_OpenSelectedChat.Location = new Point(0, 472);
             btn_OpenSelectedChat.Name = "btn_OpenSelectedChat";
             btn_OpenSelectedChat.Size = new Size(458, 31);
             btn_OpenSelectedChat.TabIndex = 3;
@@ -89,11 +90,24 @@
             checkedList_chats.Size = new Size(434, 328);
             checkedList_chats.TabIndex = 5;
             // 
+            // btn_refresh
+            // 
+            btn_refresh.AutoSize = true;
+            btn_refresh.Font = new Font("Segoe UI", 12F);
+            btn_refresh.Location = new Point(263, 421);
+            btn_refresh.Name = "btn_refresh";
+            btn_refresh.Size = new Size(183, 31);
+            btn_refresh.TabIndex = 7;
+            btn_refresh.Text = "Refresh Available Chats";
+            btn_refresh.UseVisualStyleBackColor = true;
+            btn_refresh.Click += btn_refresh_Click;
+            // 
             // HomeScreen
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(458, 456);
+            ClientSize = new Size(458, 503);
+            Controls.Add(btn_refresh);
             Controls.Add(label1);
             Controls.Add(checkedList_chats);
             Controls.Add(btn_OpenSelectedChat);
@@ -113,5 +127,6 @@
         private Button btn_OpenSelectedChat;
         private Label label1;
         private CheckedListBox checkedList_chats;
+        private Button btn_refresh;
     }
 }
