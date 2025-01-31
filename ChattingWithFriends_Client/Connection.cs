@@ -150,7 +150,8 @@ namespace ChattingWithFriends_Client
 
         private void OnMessageRecieved(int sender_id, string sender_username, string message)
         {
-            DataBase.SaveMessage(new ClientDataModels.Message {recieverName = username, senderName = sender_username, text = message });
+            //JUST SHOW THE MESSAGE FOR NOW
+            //DataBase.SaveMessage(new ClientDataModels.Message {recieverName = username, senderName = sender_username, text = message });
             //let the user know they recieved a new message.
             //todo
         }
