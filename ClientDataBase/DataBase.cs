@@ -31,11 +31,15 @@ namespace ClientDataBase
 
         private static void CreatTables()
         {
-            using (SqlConnection conn = sqlConnection)
+            /*using (SqlConnection conn = sqlConnection)
             {
-                conn.Open();
-                string createFriendTableQuery = @"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA WHERE TABLE_NAME = 'Friend')
+                
+
+            }*/
+
+            sqlConnection.Open();
+            string createFriendTableQuery = @"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Friend')
                     BEGIN
                         CREATE TABLE Friend
                         (
@@ -44,8 +48,8 @@ namespace ClientDataBase
                         );
                     END;
                     ";
-                string createFriendMessagesTableQuery = @"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA WHERE TABLE_NAME = 'FriendMessage')
+            string createFriendMessagesTableQuery = @"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'FriendMessage')
                     BEGIN
                     CREATE TABLE FriendMessage
                     (
@@ -55,8 +59,8 @@ namespace ClientDataBase
                     );
                     END;
                     ";
-                string createRecievedMessagesQuery = @"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA WHERE TABLE_NAME = 'RecievedMessages')
+            string createRecievedMessagesQuery = @"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'RecievedMessages')
                     BEGIN
                     CREATE TABLE RecievedMessages
                     (
@@ -65,8 +69,8 @@ namespace ClientDataBase
                     );
                     END;
                     ";
-                string createSentMessagesQuery = @"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA WHERE TABLE_NAME = 'SentMessages')
+            string createSentMessagesQuery = @"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'SentMessages')
                     BEGIN
                     CREATE TABLE SentMessages
                     (
@@ -78,16 +82,15 @@ namespace ClientDataBase
                     END;
                     ";
 
-                SqlCommand sqlCommand = 
-                    new SqlCommand(
-                    createFriendTableQuery +
-                    createFriendMessagesTableQuery +
-                    createRecievedMessagesQuery +
-                    createSentMessagesQuery, conn);
+            SqlCommand sqlCommand =
+                new SqlCommand(
+                createFriendTableQuery +
+                createFriendMessagesTableQuery +
+                createRecievedMessagesQuery +
+                createSentMessagesQuery, sqlConnection);
 
-                sqlCommand.ExecuteNonQuery();
-
-            }
+            sqlCommand.ExecuteNonQuery();
+            sqlConnection.Close();
 
         }
         public static void SaveFriend(Friend friend)

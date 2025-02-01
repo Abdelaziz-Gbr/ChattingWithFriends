@@ -17,6 +17,9 @@ namespace ChattingWithFriends_Client
         private bool accepting = false;
 
         public string? username { get; private set; }
+
+        public event Action OnNewClientList;
+
         public Connection()
         {
             serverSocket = new TcpClient();
@@ -28,41 +31,20 @@ namespace ChattingWithFriends_Client
 
         public void LogIn(string username, string password)
         {
+            DataBase.InitDB("username");
             SendPacketToServer(ServerCommunicationTemplate.GetLogInTemplate(username, password).ToString());
             string? serverResponse = ReadServerPacket();
             if (serverResponse != null)
                 if (serverResponse.Equals("200"))
                 {
                     this.username = username;
-                    getClientsListFromServer();
+                    //getClientsListFromServer();
                     OnLoggedIn?.Invoke();
                 }
                 else
                     MessageBox.Show($"{serverResponse}", "Try Again");
             else
                 MessageBox.Show("Failed To send credentials to the server", "Server Error");
-        }
-
-        private void getClientsListFromServer()
-        {
-            SendPacketToServer(ServerCommunicationTemplate.GetAllClientsRequestTemplate().ToString());
-            string? incommning = ReadServerPacket();
-            if (incommning != null) 
-            {
-                string[] friends = incommning.Split('$');
-                foreach (string friendString in friends) 
-                {
-                    string[] temp = friendString.Split(",");
-                    DataBase.AddIfNotExists(new Friend
-                    {
-                        id= int.Parse(temp[0]),
-                        username = temp[1]
-                    });
-
-                }
-            }
-            else
-                MessageBox.Show("Failed To reach the server", "Server Error");
         }
 
 
@@ -108,21 +90,6 @@ namespace ChattingWithFriends_Client
 
         }
 
-        private async Task<string> ReadServerPacketAsync()
-        {
-            try
-            {
-                string incommingPacket = await reader.ReadLineAsync();
-                return incommingPacket;
-            }
-            catch
-            {
-                MessageBox.Show("Server Down");
-                Application.Exit();
-            }
-            return null;
-
-        }
         public List<Friend> GetAllFriends()
         {
             var friends = DataBase.GetFriends();
@@ -139,16 +106,36 @@ namespace ChattingWithFriends_Client
                 {
                     //message could be new client list or a new message from a client.
                     //todo
-                    string[] splitPacked = serverPacket.Split('$');
-                    int senderID = int.Parse(splitPacked[0]);
-                    string senderName = splitPacked[1];
-                    string message = splitPacked[2];
-                    OnMessageRecieved(senderID, senderName, message);
+                    string[] packet = serverPacket.Split('#');
+                    int header = int.Parse(packet[0]);
+                    if(header == 1)
+                    {
+                        //new client list
+                        string[] friends = packet[1].Split('$');
+                        foreach(string friend in friends)
+                        {
+                            string[] friendData = friend.Split(',');
+                            string friendID = friendData[0];
+                            string friendUserName = friendData[1];
+                            DataBase.AddIfNotExists(new Friend { id = int.Parse(friendID) , username = friendUserName});
+                        }
+                        OnNewClientList?.Invoke();
+
+                    }
+                    else if (header == 2)
+                    {
+                        //message recieved
+                        string[] data = packet[1].Split('$');
+                        string sender = data[0];
+                        string msgBody = data[1];
+                        MessageBox.Show($"{sender}: {msgBody}");
+                        OnMessageRecieved(sender, msgBody);
+                    }
                 }
             }
         }
 
-        private void OnMessageRecieved(int sender_id, string sender_username, string message)
+        private void OnMessageRecieved(string sender_username, string message)
         {
             //JUST SHOW THE MESSAGE FOR NOW
             //DataBase.SaveMessage(new ClientDataModels.Message {recieverName = username, senderName = sender_username, text = message });
@@ -156,15 +143,15 @@ namespace ChattingWithFriends_Client
             //todo
         }
 
-        public List<Friend> RefreshClientsList()
+        public void UpdateClientList()
         {
-            getClientsListFromServer();
-            return GetAllFriends();
+            SendPacketToServerAsync(ServerCommunicationTemplate.GetAllClientsRequestTemplate().ToString());
         }
-        public void SendMessage()
+
+        internal void SendMessageToFriend(string username, string message)
         {
-            //todo
-            throw new NotImplementedException();
+            //todo add the message in database and get its ID add the id to the server to wait for recieved and seen replies from the server
+            SendPacketToServerAsync($"2${username}#message");
         }
     }
 }

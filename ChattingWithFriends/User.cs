@@ -37,11 +37,11 @@ namespace ChattingWithFriends
 
         internal void SendLogInSuccessMessage()
         {
-            Task.Run(() => { SendMessageToClient("200"); });
+            Task.Run(() => { WriteToClient("200"); });
             AcceptMessages();
         }
 
-        public void SendMessageToClient(string message)
+        public void WriteToClient(string message)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace ChattingWithFriends
 
         internal void SendPasswordIncorrectMessage()
         {
-            Task.Run(() => { SendMessageToClient("Password Incorrect"); });
+            Task.Run(() => { WriteToClient("Password Incorrect"); });
         }
 
         public void AcceptMessages()
@@ -71,11 +71,34 @@ namespace ChattingWithFriends
                 {
                     case 1:
                         {
-                            Task.Run(() => { SendMessageToClient(parentUserManager.GetAllUsersAsString()); });
+                            //update client list for the user.
+                            Task.Run(() => { WriteToClient("1#" +parentUserManager.GetAllUsersAsString()); });
+                            break;
+                        }
+                    case 2:
+                        {
+                            //send message from user
+                            MessageDataModel msg = ParseMessage(userReq.reqBody);
+                            parentUserManager.ForwardMessage(msg);
+                            break;
+                        }
+                    case 3:
+                        {
+                            //aknoldejment of recievement.
                             break;
                         }
                 }
             }
+        }
+
+        private MessageDataModel ParseMessage(string reqBody)
+        {
+            string[] data = reqBody.Split("$");
+            string msgID = data[0];
+            string toUser = data[1];
+            string msg = data[2];
+            return new MessageDataModel { id = int.Parse(msgID), username = toUser, body = msg };
+           
         }
     }
 }

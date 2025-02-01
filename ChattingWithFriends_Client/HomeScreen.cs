@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClientDataModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,7 @@ namespace ChattingWithFriends_Client
         {
             InitializeComponent();
             connection = Program.GetConnection();
+            connection.OnNewClientList += ClientsListUpdated;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -38,11 +40,19 @@ namespace ChattingWithFriends_Client
         private void btn_refresh_Click(object sender, EventArgs e)
         {
             checkedList_chats.Items.Clear();
-            connection.RefreshClientsList().ForEach(
-                friend =>
-                {
-                    checkedList_chats.Items.Add(friend);
-                });
+            connection.UpdateClientList();
+        }
+
+        private void ClientsListUpdated()
+        {
+            List<Friend> friends = connection.GetAllFriends();
+            checkedList_chats.Items.Clear();
+            foreach (Friend friend in friends)
+            {
+                if (friend.username != connection.username)
+                    checkedList_chats.Items.Add(friend.username);
+
+            }
         }
     }
 }

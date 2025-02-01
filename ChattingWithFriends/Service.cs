@@ -98,7 +98,7 @@ namespace ChattingWithFriends
                 {
                     case 0:
                         {
-                            //log
+                            //log IN
                             usersManager.AttemptLogin(userReq.reqBody, tcpClient);
                             break;
                         }

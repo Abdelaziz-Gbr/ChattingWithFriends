@@ -10,19 +10,46 @@ namespace ChattingWithFriends_Client
 
         private void btn_signIn_Click(object sender, EventArgs e)
         {
-            string username = "Abdelaziz";// txtBox_username.Text;
-            string password = "123";// txtBox_password.Text;
-
+            if (!CheckForValidInput())
+            {
+                pnl_Instructions.Visible = true;
+                return;
+            }
+            string username = txtBox_username.Text;
+            string password = txtBox_password.Text;
             serverConneection = Program.GetConnection();
             serverConneection.OnLoggedIn += SignedIn;
             serverConneection.LogIn(username, password);
         }
 
-        private void SignedIn() 
+        private bool CheckForValidInput()
+        {
+            if (txtBox_username.Text.Length < 1 || txtBox_username.Text.Contains('#') || txtBox_username.Text.Contains('$'))
+            {
+                return false;
+            }
+            if (txtBox_password.Text.Length < 1 || txtBox_password.Text.Contains('#') || txtBox_password.Text.Contains('$'))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void SignedIn()
         {
             HomeScreen homeScreen = new HomeScreen();
             homeScreen.Show();
             this.Hide();
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LogIn_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

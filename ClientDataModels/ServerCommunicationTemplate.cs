@@ -24,7 +24,7 @@ namespace ClientDataModels
 
         public override string ToString()
         {
-            return $"{header}${body}";
+            return $"{header}#{body}";
         }
     }
 }
