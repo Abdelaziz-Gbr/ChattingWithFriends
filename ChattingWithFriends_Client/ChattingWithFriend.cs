@@ -10,10 +10,12 @@ using System.Windows.Forms;
 
 namespace ChattingWithFriends_Client
 {
+    public delegate void OnCloseEvent(string username);
     public partial class ChattingWithFriend : Form
     {
         private Connection connection;
         private string username;
+        public event OnCloseEvent CloseEvent;
         public ChattingWithFriend(string username)
         {
             this.username = username;
@@ -25,6 +27,16 @@ namespace ChattingWithFriends_Client
         {
             string message = txtBox_MessageInput.Text;
             connection.SendMessageToFriend(username, message);
+        }
+
+        private void ChattingWithFriend_Load(object sender, EventArgs e)
+        {
+            Text += $" {username}";
+        }
+
+        private void ChattingWithFriend_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseEvent?.Invoke(username);
         }
     }
 }

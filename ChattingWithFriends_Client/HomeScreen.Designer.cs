@@ -70,7 +70,7 @@
             btn_OpenSelectedChat.TabIndex = 3;
             btn_OpenSelectedChat.Text = "Open Selected Chat";
             btn_OpenSelectedChat.UseVisualStyleBackColor = true;
-            btn_OpenSelectedChat.Click += button2_Click;
+            btn_OpenSelectedChat.Click += btn_OpenChat_Click;
             // 
             // label1
             // 

@@ -72,6 +72,8 @@
             Controls.Add(txtBox_DisplayChat);
             Name = "ChattingWithFriend";
             Text = "ChattingWithFriend";
+            FormClosing += ChattingWithFriend_FormClosing;
+            Load += ChattingWithFriend_Load;
             ResumeLayout(false);
             PerformLayout();
         }
