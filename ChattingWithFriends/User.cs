@@ -79,7 +79,7 @@ namespace ChattingWithFriends
                         {
                             //send message from user
                             MessageDataModel msg = ParseMessage(userReq.reqBody);
-                            parentUserManager.ForwardMessage(msg);
+                            parentUserManager.ForwardMessage(msg, dataModel.username);
                             break;
                         }
                     case 3:

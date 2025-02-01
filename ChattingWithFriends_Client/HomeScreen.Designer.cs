@@ -89,6 +89,7 @@
             checkedList_chats.Name = "checkedList_chats";
             checkedList_chats.Size = new Size(434, 328);
             checkedList_chats.TabIndex = 5;
+            checkedList_chats.SelectedIndexChanged += checkedList_chats_SelectedIndexChanged;
             // 
             // btn_refresh
             // 

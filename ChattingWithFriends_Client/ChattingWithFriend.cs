@@ -32,6 +32,7 @@ namespace ChattingWithFriends_Client
         private void ChattingWithFriend_Load(object sender, EventArgs e)
         {
             Text += $" {username}";
+            //load messages.
         }
 
         private void ChattingWithFriend_FormClosing(object sender, FormClosingEventArgs e)

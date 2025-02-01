@@ -100,13 +100,13 @@ namespace ChattingWithFriends
             return allUsersString;
         }
 
-        internal void ForwardMessage(MessageDataModel msg)
+        internal void ForwardMessage(MessageDataModel msg, string sender)
         {
             string username = msg.username;
             foreach (var user in connectedUsers) 
             {
                 if (user.dataModel.username == username)
-                    user.WriteToClient($"2#{msg.username}${msg.body}");
+                    user.WriteToClient($"2#{msg.id}${sender}${msg.body}");
             }
         }
     }

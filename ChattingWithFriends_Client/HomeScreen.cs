@@ -1,4 +1,5 @@
 ﻿using ClientDataModels;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,7 @@ namespace ChattingWithFriends_Client
 {
     public partial class HomeScreen : Form
     {
+        int checkedIndex = -1;
         private Connection connection;
         private readonly List<string> activeChats = [];
         public HomeScreen()
@@ -45,12 +47,12 @@ namespace ChattingWithFriends_Client
         private void ChatClose(string username)
         {
             int index = -1;
-            for (int i = 0;  i < activeChats.Count; i++)
-                if(activeChats[i] == username)
+            for (int i = 0; i < activeChats.Count; i++)
+                if (activeChats[i] == username)
                 {
                     index = i; break;
                 }
-            if(index != -1)
+            if (index != -1)
                 activeChats.RemoveAt(index);
 
         }
@@ -78,6 +80,13 @@ namespace ChattingWithFriends_Client
                     checkedList_chats.Items.Add(friend.username);
 
             }
+        }
+
+        private void checkedList_chats_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var checkedItem = checkedList_chats.SelectedItem;
+            checkedList_chats.SelectedItems.Clear();
+            checkedList_chats.SelectedItems.Add(checkedItem);
         }
     }
 }
