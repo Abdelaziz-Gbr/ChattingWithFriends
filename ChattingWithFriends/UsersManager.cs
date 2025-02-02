@@ -109,5 +109,39 @@ namespace ChattingWithFriends
                     user.WriteToClient($"2#{msg.id}${sender}${msg.body}");
             }
         }
+
+        internal void SendAknowledgment(string msgId, string friendUsername, string username)
+        {
+            int userIndex = -1;
+            for (int i = 0; i < connectedUsers.Count; i++) 
+            {
+                if (connectedUsers[i].GetUsername() == friendUsername)
+                {
+                    userIndex = i;
+                    break;
+                }
+            }
+            if(userIndex != -1)
+            {
+                connectedUsers[userIndex].WriteToClient($"3#{msgId}${username}");
+            }
+        }
+
+        internal void SendMsgSeen(string msgId, string friendUsername, string username)
+        {
+            int userIndex = -1;
+            for (int i = 0; i < connectedUsers.Count; i++)
+            {
+                if (connectedUsers[i].GetUsername() == friendUsername)
+                {
+                    userIndex = i;
+                    break;
+                }
+            }
+            if (userIndex != -1)
+            {
+                connectedUsers[userIndex].WriteToClient($"4#{msgId}${username}");
+            }
+        }
     }
 }

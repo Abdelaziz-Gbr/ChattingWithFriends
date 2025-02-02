@@ -84,7 +84,18 @@ namespace ChattingWithFriends
                         }
                     case 3:
                         {
-                            //aknoldejment of recievement.
+                            var data = userReq.GetData();
+                            string msgId = data[0];
+                            string friendUsername = data[1];
+                            parentUserManager.SendAknowledgment(msgId, friendUsername, GetUsername());
+                            break;
+                        }
+                    case 4:
+                        {
+                            var data = userReq.GetData();
+                            string msgId = data[0];
+                            string friendUsername = data[1];
+                            parentUserManager.SendMsgSeen(msgId, friendUsername, GetUsername());
                             break;
                         }
                 }

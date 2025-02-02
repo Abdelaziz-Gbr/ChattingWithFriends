@@ -53,6 +53,8 @@ namespace ChattingWithFriends_Client
             //btn_reload.Enabled = false;
             txtBox_DisplayChat.Clear();
             ReloadChat();
+            lbl_reload.Visible = false;
+            btn_reload.Enabled = false;
         }
 
         private void ReloadChat()
@@ -94,6 +96,11 @@ namespace ChattingWithFriends_Client
         private void NewMessageRecieved(string msg)
         {
             txtBox_DisplayChat.Text += $"(recieved) {DateTime.Now}: {Environment.NewLine}{msg}{Environment.NewLine}";
+        }
+        private void OnChatUpdated()
+        {
+            lbl_reload.Visible = true;
+            btn_reload.Enabled = true;
         }
     }
 }

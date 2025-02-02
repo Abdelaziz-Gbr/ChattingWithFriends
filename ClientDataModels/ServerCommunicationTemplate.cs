@@ -21,6 +21,10 @@ namespace ClientDataModels
         {
             return new ServerCommunicationTemplate { header = 1, body = "" };
         }
+        public static ServerCommunicationTemplate GetMessageAknowledgment(int msgID, string username)
+        {
+            return new ServerCommunicationTemplate { header = 3, body = $"{msgID}${username}" };
+        }
 
         public override string ToString()
         {

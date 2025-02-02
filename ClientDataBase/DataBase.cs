@@ -237,5 +237,22 @@ namespace ClientDataBase
             return friends;
         }
 
+        public static void SetMessageRecieved(string msgId)
+        {
+            sqlConnection.Open();
+            var cmd = new SqlCommand("UPDATE SentMessages SET recieved = 1 WHERE msg_id = @msgID", sqlConnection);
+            cmd.Parameters.AddWithValue("msgID", msgId);
+            cmd.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+
+        public static void SetMessageSeen(string msgId)
+        {
+            sqlConnection.Open();
+            var cmd = new SqlCommand("UPDATE SentMessages SET seen = 1 WHERE msg_id = @msgID", sqlConnection);
+            cmd.Parameters.AddWithValue("msgID", msgId);
+            cmd.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
     }
 }

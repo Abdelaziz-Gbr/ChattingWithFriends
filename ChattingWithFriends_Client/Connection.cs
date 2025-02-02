@@ -10,6 +10,7 @@ namespace ChattingWithFriends_Client
     {
         public string username { get; set; }
         public Action<string> OnMessageReceived;
+        public Action ChatUpdated;
     }
 
     internal class Connection
@@ -135,13 +136,37 @@ namespace ChattingWithFriends_Client
                     {
                         //message recieved
                         string[] data = packet[1].Split('$');
-                        string FriendmsgId = data[0];
+                        int FriendmsgId = int.Parse(data[0]);
                         string sender = data[1];
                         string msgBody = data[2];
                         OnMessageRecieved(sender, msgBody);
+                        AcknowledgRecievement(FriendmsgId, sender);
+                    }
+                    else if(header == 3)
+                    {
+                        //aknowledgment
+                        string[] data = packet[1].Split('$');
+                        string msgId = data[0];
+                        string friend_name = data[1];
+                        DataBase.SetMessageRecieved(msgId);
+                        NotifyChatObserver(friend_name);
+                    }
+                    else if (header == 4)
+                    {
+                        //aknowledgment
+                        string[] data = packet[1].Split('$');
+                        string msgId = data[0];
+                        string friend_name = data[1];
+                        DataBase.SetMessageSeen(msgId);
+                        NotifyChatObserver(friend_name);
                     }
                 }
             }
+        }
+
+        private void AcknowledgRecievement(int friendmsgId, string sender)
+        {
+            SendPacketToServerAsync(ServerCommunicationTemplate.GetMessageAknowledgment(friendmsgId, sender).ToString());
         }
 
         private void OnMessageRecieved(string sender_username, string message)
@@ -166,7 +191,6 @@ namespace ChattingWithFriends_Client
             //todo add the message in database and get its ID add the id to the server to wait for recieved and seen replies from the server
             int friendID = DataBase.GetFriendID(friendUsername);
             int msgId = DataBase.SaveSent(friendID, message);
-            MessageBox.Show($"2#{msgId}/$to {friendUsername}\n${message}", $"sending from {username}");
             SendPacketToServerAsync($"2#{msgId}${friendUsername}${message}");
         }
 
@@ -177,6 +201,17 @@ namespace ChattingWithFriends_Client
                 if (chatObservers[index].username == friendUsername)
                     break;
             chatObservers.RemoveAt(index);
+        }
+
+        private void NotifyChatObserver(string friendUsername) 
+        {
+            foreach(ChatObserver chatObserver in chatObservers)
+            {
+                if(chatObserver.username == friendUsername)
+                {
+                    chatObserver.ChatUpdated?.Invoke();
+                }
+            }
         }
     }
 }

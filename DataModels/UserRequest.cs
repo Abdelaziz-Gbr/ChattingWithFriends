@@ -17,5 +17,9 @@ namespace DataModels
             int header = int.Parse(temp[0]);
             return new UserRequest { reqBody = temp[1], reqType = header };
         }
+        public string[] GetData()
+        {
+            return reqBody.Split('$');
+        }
     }
 }
