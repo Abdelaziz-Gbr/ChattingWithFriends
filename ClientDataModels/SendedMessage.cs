@@ -19,5 +19,10 @@ namespace ClientDataModels
         public bool recieved { get; set; }
 
         public string msg_body { get; set; }
+
+        public override string ToString()
+        {
+            return $"@{msg_time} seen:{seen} recieved:{recieved}. {Environment.NewLine}{msg_body}";
+        }
     }
 }

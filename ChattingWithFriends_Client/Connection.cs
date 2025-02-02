@@ -5,6 +5,13 @@ using ClientDataBase;
 using Microsoft.VisualBasic;
 namespace ChattingWithFriends_Client
 {
+
+    internal class ChatObserver
+    {
+        public string username { get; set; }
+        public Action<string> OnMessageReceived;
+    }
+
     internal class Connection
     {
         private int port = 45000;
@@ -21,6 +28,7 @@ namespace ChattingWithFriends_Client
 
         public event Action OnNewClientList;
 
+        public List<ChatObserver> chatObservers = new List<ChatObserver>();
         public Connection()
         {
             serverSocket = new TcpClient();
@@ -127,11 +135,9 @@ namespace ChattingWithFriends_Client
                     {
                         //message recieved
                         string[] data = packet[1].Split('$');
-                        string msgId = data[0];
+                        string FriendmsgId = data[0];
                         string sender = data[1];
                         string msgBody = data[2];
-                        //todo acknoldeg recieved msgid from user.
-                        MessageBox.Show($"{sender}: {msgBody}");
                         OnMessageRecieved(sender, msgBody);
                     }
                 }
@@ -140,10 +146,14 @@ namespace ChattingWithFriends_Client
 
         private void OnMessageRecieved(string sender_username, string message)
         {
-            //JUST SHOW THE MESSAGE FOR NOW
-            //DataBase.SaveMessage(new ClientDataModels.Message {recieverName = username, senderName = sender_username, text = message });
-            //let the user know they recieved a new message.
-            //todo
+            DataBase.SaveRecieved(sender_username, message);
+            foreach (ChatObserver chat in chatObservers)
+            {
+                if (chat.username == sender_username)
+                {
+                    chat.OnMessageReceived(message);
+                }
+            }
         }
 
         public void UpdateClientList()
@@ -154,10 +164,19 @@ namespace ChattingWithFriends_Client
         internal void SendMessageToFriend(string friendUsername, string message)
         {
             //todo add the message in database and get its ID add the id to the server to wait for recieved and seen replies from the server
-            int friendID = DataBase.getFriendID(friendUsername);
+            int friendID = DataBase.GetFriendID(friendUsername);
             int msgId = DataBase.SaveSent(friendID, message);
             MessageBox.Show($"2#{msgId}/$to {friendUsername}\n${message}", $"sending from {username}");
             SendPacketToServerAsync($"2#{msgId}${friendUsername}${message}");
+        }
+
+        public void RemoveMyChatObserver(string friendUsername)
+        {
+            int index = 0;
+            for (index = 0; index < chatObservers.Count; index++)
+                if (chatObservers[index].username == friendUsername)
+                    break;
+            chatObservers.RemoveAt(index);
         }
     }
 }

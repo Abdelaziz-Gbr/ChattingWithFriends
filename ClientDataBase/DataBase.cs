@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using ClientDataModels;
+using System.Data;
 namespace ClientDataBase
 {
     public class DataBase
@@ -123,7 +124,7 @@ namespace ClientDataBase
             SaveFriend(friend);
         }
 
-        public static int getFriendID(string friendUsername)
+        public static int GetFriendID(string friendUsername)
         {
             sqlConnection.Open();
             SqlCommand cmd = new SqlCommand("SELECT id FROM Friend WHERE username = @username", sqlConnection);
@@ -155,25 +156,67 @@ namespace ClientDataBase
             return id;
         }
 
-        public static void SaveRecieved(RecievedMessage message)
+        public static void SaveRecieved(string sender_username, string msg_body)
         {
-            int id = SaveMessage(message.msg_body);
+            int msgId = SaveMessage(msg_body);
+            int sender_id = GetFriendID(sender_username);
             sqlConnection.Open();
             SqlCommand cmd = new SqlCommand("INSERT INTO RecievedMessages (msg_id, fromFriend) VALUES (@msgId , @friendId)", sqlConnection);
-            cmd.Parameters.AddWithValue("msgId", message.msg_id);
-            cmd.Parameters.AddWithValue("friendId", message.sender_id);
+            cmd.Parameters.AddWithValue("msgId", msgId);
+            cmd.Parameters.AddWithValue("friendId", sender_id);
             int rows = cmd.ExecuteNonQuery();
             sqlConnection.Close();
         }
 
-        public static List<MessageModel> GetMessagesRecievedFrom(int senderId)
+        public static List<RecievedMessage> GetMessagesRecievedFrom(int senderId)
         {
-            throw new NotImplementedException();
+            sqlConnection.Open();
+            string query = "SELECT FriendMessage.id , FriendMessage.time, FriendMessage.body FROM FriendMessage INNER JOIN RecievedMessages ON RecievedMessages.msg_id = FriendMessage.id AND RecievedMessages.fromFriend = @friendID ORDER BY FriendMessage.time ASC";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            cmd.Parameters.AddWithValue("friendID", senderId);
+            DataTable msgs_dataTable = new DataTable();
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(msgs_dataTable);
+            sqlConnection.Close();
+            var messages = new List<RecievedMessage>();
+            foreach (DataRow row in msgs_dataTable.Rows) 
+            {
+                messages.Add(new RecievedMessage
+                {
+                    msg_id = (int)row["id"],
+                    msg_body = (string)row["body"],
+                    msg_time = (DateTime)row["time"],
+                    sender_id = senderId
+                });
+            }
+            return messages;
+
         }
 
-        public static List<MessageModel> GetMessagesSentTo(int recieverId)
+        public static List<SendedMessage> GetMessagesSentTo(int recieverId)
         {
-            throw new NotImplementedException();
+            sqlConnection.Open();
+            string query = "SELECT FriendMessage.id , FriendMessage.time, FriendMessage.body, SentMessages.seen, SentMessages.recieved FROM FriendMessage INNER JOIN SentMessages ON SentMessages.msg_id = FriendMessage.id AND SentMessages.toFriend = @friendID ORDER BY FriendMessage.time ASC";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            cmd.Parameters.AddWithValue("friendID", recieverId);
+            DataTable msgs_dataTable = new DataTable();
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(msgs_dataTable);
+            sqlConnection.Close();
+            var messages = new List<SendedMessage>();
+            foreach (DataRow row in msgs_dataTable.Rows)
+            {
+                messages.Add(new SendedMessage
+                {
+                    msg_id = (int)row["id"],
+                    msg_body = (string)row["body"],
+                    msg_time = (DateTime)row["time"],
+                    reciever_id = recieverId,
+                    recieved = (bool)row["recieved"],
+                    seen = (bool)row["seen"]
+                });
+            }
+            return messages;
         }
 
         public static List<Friend> GetFriends() 

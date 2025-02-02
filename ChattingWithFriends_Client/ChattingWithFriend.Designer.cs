@@ -31,6 +31,7 @@
             txtBox_DisplayChat = new TextBox();
             txtBox_MessageInput = new TextBox();
             btn_Send = new Button();
+            btn_reload = new Button();
             SuspendLayout();
             // 
             // txtBox_DisplayChat
@@ -45,16 +46,16 @@
             // txtBox_MessageInput
             // 
             txtBox_MessageInput.Font = new Font("Segoe UI", 12F);
-            txtBox_MessageInput.Location = new Point(12, 407);
+            txtBox_MessageInput.Location = new Point(12, 409);
             txtBox_MessageInput.Name = "txtBox_MessageInput";
-            txtBox_MessageInput.Size = new Size(627, 29);
+            txtBox_MessageInput.Size = new Size(536, 29);
             txtBox_MessageInput.TabIndex = 1;
             // 
             // btn_Send
             // 
             btn_Send.AutoSize = true;
             btn_Send.Font = new Font("Segoe UI", 12F);
-            btn_Send.Location = new Point(669, 407);
+            btn_Send.Location = new Point(554, 407);
             btn_Send.Name = "btn_Send";
             btn_Send.Size = new Size(119, 31);
             btn_Send.TabIndex = 2;
@@ -62,11 +63,24 @@
             btn_Send.UseVisualStyleBackColor = true;
             btn_Send.Click += btn_Send_Click;
             // 
+            // btn_reload
+            // 
+            btn_reload.AutoSize = true;
+            btn_reload.Font = new Font("Segoe UI", 12F);
+            btn_reload.Location = new Point(679, 407);
+            btn_reload.Name = "btn_reload";
+            btn_reload.Size = new Size(109, 31);
+            btn_reload.TabIndex = 3;
+            btn_reload.Text = "Reload";
+            btn_reload.UseVisualStyleBackColor = true;
+            btn_reload.Click += btn_reload_Click;
+            // 
             // ChattingWithFriend
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btn_reload);
             Controls.Add(btn_Send);
             Controls.Add(txtBox_MessageInput);
             Controls.Add(txtBox_DisplayChat);
@@ -83,5 +97,6 @@
         private TextBox txtBox_DisplayChat;
         private TextBox txtBox_MessageInput;
         private Button btn_Send;
+        private Button btn_reload;
     }
 }

@@ -15,5 +15,10 @@ namespace ClientDataModels
         public DateTime msg_time { get; set; }
         public string msg_body{ get; set; }
 
+        public override string ToString()
+        {
+            return $"@{msg_time}:{Environment.NewLine}{msg_body}";
+        }
+
     }
 }

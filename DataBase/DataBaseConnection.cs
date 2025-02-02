@@ -11,21 +11,6 @@ namespace DataBase
         {
             sqlConnection = new SqlConnection("Data Source=s3dy;Initial Catalog=ChatApplication;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
-
-       /* public int GetUserIDIfExists(UserDataModel model)
-        {
-            string selectQuery = $"SELECT id FROM Users WHERE username=@username AND password=@password";
-            sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand(selectQuery, sqlConnection);
-            cmd.Parameters.AddWithValue("username", model.username);
-            cmd.Parameters.AddWithValue("password", model.password);
-            object result = cmd.ExecuteScalar();
-            sqlConnection.Close();
-            if(result == null)
-                return -1;
-            return (int)result;
-        }*/
-
         public int AddUsesr(UserDataModel userDataModel)
         {
             string sqlQuery = "INSERT INTO Users (username, password) OUTPUT INSERTED.id VALUES (@username,@password)";
@@ -71,19 +56,6 @@ namespace DataBase
             sqlConnection.Close();
             return user;
         }
-
-       /* public UserDataModel? CheckUserCredsOrAddIfNotFound(UserDataModel userData)
-        {
-            var user = GetUesrByUserName(userData.username);
-            if (user != null)//user found            {
-                return user;
-            int userid = AddUsesr(userData);
-            if(userid != -1)//user added successfully
-                return new UserDataModel { id = userid, username = userData.username};
-            //if reached then this user is either dublicated, wrong password Or Blocked.
-            return null;
-
-        }*/
 
         public List<UserDataModel> GetUsers() 
         {
