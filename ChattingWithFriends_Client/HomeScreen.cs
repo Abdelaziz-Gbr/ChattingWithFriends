@@ -82,11 +82,18 @@ namespace ChattingWithFriends_Client
             }
         }
 
-        private void checkedList_chats_SelectedIndexChanged(object sender, EventArgs e)
+        private void checkedList_chats_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-        /*    var checkedItem = checkedList_chats.SelectedItem;
-            checkedList_chats.SelectedItems.Clear();
-            checkedList_chats.SelectedItems.Add(checkedItem);*/
+            if(e.NewValue == CheckState.Checked)
+            {
+                for(int i = 0; i < checkedList_chats.Items.Count; i++ )
+                {
+                    if(i != e.Index)
+                    {
+                        checkedList_chats.SetItemChecked(i, false);
+                    }
+                }
+            }
         }
     }
 }

@@ -84,12 +84,13 @@
             // 
             // checkedList_chats
             // 
+            checkedList_chats.CheckOnClick = true;
             checkedList_chats.FormattingEnabled = true;
             checkedList_chats.Location = new Point(12, 87);
             checkedList_chats.Name = "checkedList_chats";
             checkedList_chats.Size = new Size(434, 328);
             checkedList_chats.TabIndex = 5;
-            checkedList_chats.SelectedIndexChanged += checkedList_chats_SelectedIndexChanged;
+            checkedList_chats.ItemCheck += checkedList_chats_ItemCheck;
             // 
             // btn_refresh
             // 
