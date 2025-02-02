@@ -42,14 +42,17 @@ namespace ChattingWithFriends_Client
             this.Hide();
         }
 
-        private void label6_Click(object sender, EventArgs e)
+
+        private void chkBox_ShowPassword_CheckedChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void LogIn_Load(object sender, EventArgs e)
-        {
-
+            if(chkBox_ShowPassword.Checked) 
+            {
+                txtBox_password.PasswordChar = '\0';
+            }
+            else
+            {
+                txtBox_password.PasswordChar = '*';
+            }
         }
     }
 }

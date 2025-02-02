@@ -34,10 +34,11 @@
             label1 = new Label();
             label2 = new Label();
             pnl_Instructions = new Panel();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
             label6 = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            chkBox_ShowPassword = new CheckBox();
             pnl_Instructions.SuspendLayout();
             SuspendLayout();
             // 
@@ -66,6 +67,7 @@
             txtBox_password.Font = new Font("Segoe UI", 12F);
             txtBox_password.Location = new Point(106, 66);
             txtBox_password.Name = "txtBox_password";
+            txtBox_password.PasswordChar = '*';
             txtBox_password.Size = new Size(159, 29);
             txtBox_password.TabIndex = 2;
             // 
@@ -101,27 +103,16 @@
             pnl_Instructions.TabIndex = 5;
             pnl_Instructions.Visible = false;
             // 
-            // label3
+            // label6
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F);
-            label3.ForeColor = Color.Red;
-            label3.Location = new Point(3, 8);
-            label3.Name = "label3";
-            label3.Size = new Size(192, 21);
-            label3.TabIndex = 6;
-            label3.Text = ".user name can't be empty";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 12F);
-            label4.ForeColor = Color.Red;
-            label4.Location = new Point(3, 29);
-            label4.Name = "label4";
-            label4.Size = new Size(218, 21);
-            label4.TabIndex = 7;
-            label4.Text = ".user name can't contatin (#,$)";
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 12F);
+            label6.ForeColor = Color.Red;
+            label6.Location = new Point(3, 71);
+            label6.Name = "label6";
+            label6.Size = new Size(204, 21);
+            label6.TabIndex = 9;
+            label6.Text = "password can't contain (#,$)";
             // 
             // label5
             // 
@@ -134,23 +125,46 @@
             label5.TabIndex = 8;
             label5.Text = "password can't be left empty";
             // 
-            // label6
+            // label4
             // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 12F);
-            label6.ForeColor = Color.Red;
-            label6.Location = new Point(3, 71);
-            label6.Name = "label6";
-            label6.Size = new Size(204, 21);
-            label6.TabIndex = 9;
-            label6.Text = "password can't contain (#,$)";
-            label6.Click += label6_Click;
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 12F);
+            label4.ForeColor = Color.Red;
+            label4.Location = new Point(3, 29);
+            label4.Name = "label4";
+            label4.Size = new Size(218, 21);
+            label4.TabIndex = 7;
+            label4.Text = ".user name can't contatin (#,$)";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 12F);
+            label3.ForeColor = Color.Red;
+            label3.Location = new Point(3, 8);
+            label3.Name = "label3";
+            label3.Size = new Size(192, 21);
+            label3.TabIndex = 6;
+            label3.Text = ".user name can't be empty";
+            // 
+            // chkBox_ShowPassword
+            // 
+            chkBox_ShowPassword.AutoSize = true;
+            chkBox_ShowPassword.Font = new Font("Segoe UI", 8F);
+            chkBox_ShowPassword.Location = new Point(27, 101);
+            chkBox_ShowPassword.Name = "chkBox_ShowPassword";
+            chkBox_ShowPassword.Size = new Size(107, 17);
+            chkBox_ShowPassword.TabIndex = 6;
+            chkBox_ShowPassword.Text = "Show Password";
+            chkBox_ShowPassword.UseVisualStyleBackColor = true;
+            chkBox_ShowPassword.CheckedChanged += chkBox_ShowPassword_CheckedChanged;
             // 
             // LogIn
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(590, 212);
+            Controls.Add(chkBox_ShowPassword);
             Controls.Add(pnl_Instructions);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -159,7 +173,6 @@
             Controls.Add(btn_signIn);
             Name = "LogIn";
             Text = "Chat With Firends ";
-            Load += LogIn_Load;
             pnl_Instructions.ResumeLayout(false);
             pnl_Instructions.PerformLayout();
             ResumeLayout(false);
@@ -178,5 +191,6 @@
         private Label label5;
         private Label label4;
         private Label label3;
+        private CheckBox chkBox_ShowPassword;
     }
 }
