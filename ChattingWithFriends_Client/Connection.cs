@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using ClientDataModels;
 using ClientDataBase;
+using Microsoft.VisualBasic;
 namespace ChattingWithFriends_Client
 {
     internal class Connection
@@ -31,12 +32,12 @@ namespace ChattingWithFriends_Client
 
         public void LogIn(string username, string password)
         {
-            DataBase.InitDB("username");
             SendPacketToServer(ServerCommunicationTemplate.GetLogInTemplate(username, password).ToString());
             string? serverResponse = ReadServerPacket();
             if (serverResponse != null)
                 if (serverResponse.Equals("200"))
                 {
+                    DataBase.InitDB(username);
                     this.username = username;
                     //getClientsListFromServer();
                     OnLoggedIn?.Invoke();
@@ -126,8 +127,10 @@ namespace ChattingWithFriends_Client
                     {
                         //message recieved
                         string[] data = packet[1].Split('$');
-                        string sender = data[0];
-                        string msgBody = data[1];
+                        string msgId = data[0];
+                        string sender = data[1];
+                        string msgBody = data[2];
+                        //todo acknoldeg recieved msgid from user.
                         MessageBox.Show($"{sender}: {msgBody}");
                         OnMessageRecieved(sender, msgBody);
                     }
@@ -148,10 +151,13 @@ namespace ChattingWithFriends_Client
             SendPacketToServerAsync(ServerCommunicationTemplate.GetAllClientsRequestTemplate().ToString());
         }
 
-        internal void SendMessageToFriend(string username, string message)
+        internal void SendMessageToFriend(string friendUsername, string message)
         {
             //todo add the message in database and get its ID add the id to the server to wait for recieved and seen replies from the server
-            SendPacketToServerAsync($"2${username}#message");
+            int friendID = DataBase.getFriendID(friendUsername);
+            int msgId = DataBase.SaveSent(friendID, message);
+            MessageBox.Show($"2#{msgId}/$to {friendUsername}\n${message}", $"sending from {username}");
+            SendPacketToServerAsync($"2#{msgId}${friendUsername}${message}");
         }
     }
 }

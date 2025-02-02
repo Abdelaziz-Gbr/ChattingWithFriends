@@ -58,12 +58,12 @@ namespace ChattingWithFriends
             Task.Run(() => { WriteToClient("Password Incorrect"); });
         }
 
-        public void AcceptMessages()
+        public async void AcceptMessages()
         {
             working = true;
             while (working)
             {
-                string tempReq = reader.ReadLine();
+                string tempReq = await reader.ReadLineAsync();
 
                 var userReq =  UserRequest.ParseFromString(tempReq);
 

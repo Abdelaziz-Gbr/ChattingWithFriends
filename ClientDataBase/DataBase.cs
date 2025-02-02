@@ -31,11 +31,6 @@ namespace ClientDataBase
 
         private static void CreatTables()
         {
-            /*using (SqlConnection conn = sqlConnection)
-            {
-                
-
-            }*/
 
             sqlConnection.Open();
             string createFriendTableQuery = @"
@@ -128,26 +123,36 @@ namespace ClientDataBase
             SaveFriend(friend);
         }
 
-
-        public static int SaveMessage(string message)
+        public static int getFriendID(string friendUsername)
         {
             sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[FriendMessage] (body) OUTPUT INSERTED.id VALUES (@msgBody) ", sqlConnection);
+            SqlCommand cmd = new SqlCommand("SELECT id FROM Friend WHERE username = @username", sqlConnection);
+            cmd.Parameters.AddWithValue ("username", friendUsername);
+            int id = (int)cmd.ExecuteScalar();
+            sqlConnection.Close();
+            return id;
+        }
+
+
+        private static int SaveMessage(string message)
+        {
+            sqlConnection.Open();
+            SqlCommand cmd = new SqlCommand("INSERT INTO FriendMessage (body)  OUTPUT INSERTED.id VALUES (@msgBody) ", sqlConnection);
             cmd.Parameters.AddWithValue("msgBody", message);
             object result = cmd.ExecuteScalar();
             sqlConnection.Close();
             return (int)result;
         }
-        public static void SaveSent(SendedMessage message)
+        public static int SaveSent(int friendId, string message)
         {
-            int id = SaveMessage(message.msg_body);
+            int id = SaveMessage(message);
             sqlConnection.Open();
             SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[SentMessages] ([msg_id], [toFriend]) VALUES (@msgId ,@friendId)", sqlConnection);
             cmd.Parameters.AddWithValue("msgId", id);
-            cmd.Parameters.AddWithValue("friendId", message.reciever_id);
+            cmd.Parameters.AddWithValue("friendId", friendId);
             int rows = cmd.ExecuteNonQuery();
             sqlConnection.Close();
-
+            return id;
         }
 
         public static void SaveRecieved(RecievedMessage message)

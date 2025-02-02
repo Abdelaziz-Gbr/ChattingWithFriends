@@ -42,41 +42,6 @@ namespace ChattingWithFriends
             serviceJob?.Dispose();
         }
 
-       /* private void AcceptIncomming()
-        {
-            listener.Start();
-            while(servicing)
-            {
-                TcpClient tcpClient = listener.AcceptTcpClient();
-                UserDataModel? user = GetUserCreditentials(tcpClient);
-                if(user != null) 
-                {
-                    bool userCorrect = usersManager.AddUserOrCheckIfCredsCorrect(user, tcpClient);
-                    //maybe show the user is now online.
-                    *//*if (userCorrect)
-                        OnConnectedUsersListUpdated?.Invoke();
-                    else
-                        throw new Exception("to do");*//*
-                }
-            }
-        }*/
-
-        private UserDataModel? GetUserCreditentials(TcpClient tcpClient)
-        {
-            StreamReader sr = new StreamReader(tcpClient.GetStream());
-            try
-            {
-                string packet = sr.ReadLine();
-                string[] creds = packet.Split(',');
-                return new UserDataModel { password = creds[1], username = creds[0] };
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message, "error getting user creds");
-                return null;
-            }
-        }
-
         public List<UserDataModel> GetAllUsers()
         {
             return usersManager.allUsers;
@@ -104,7 +69,6 @@ namespace ChattingWithFriends
                         }
                     default:
                         {
-
                             BadRequest(tcpClient);
                             break;
                         }
